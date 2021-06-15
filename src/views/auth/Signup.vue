@@ -10,6 +10,7 @@
 </template>
 
 <script>
+import { useRouter } from "vue-router";
 import useSignup from "../../composables/useSignup";
 import { ref } from "vue";
 export default {
@@ -18,11 +19,14 @@ export default {
     const email = ref("");
     const password = ref("");
     const displayName = ref("");
+    const router = useRouter();
 
     const handleSubmit = async () => {
       const res = await signup(email.value, password.value, displayName.value);
       if (!error.value) {
-        console.log("user logged in ");
+        router.push({
+          name: "UserPlaylists",
+        });
       }
     };
     return { email, password, displayName, error, handleSubmit };

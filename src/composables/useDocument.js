@@ -4,12 +4,12 @@ const { ref } = require("@vue/runtime-dom");
 const useDocument = (collection, id) => {
   let error = ref(null);
   let isPending = ref(false);
+  const docRef = projectFirestore.collection(collection).doc(id);
 
   const deleteDoc = async () => {
     isPending.value = true;
     error.value = null;
 
-    const docRef = projectFirestore.collection(collection).doc(id);
     try {
       error.value = null;
       const res = await docRef.delete();
@@ -25,7 +25,6 @@ const useDocument = (collection, id) => {
     isPending.value = true;
     error.value = null;
 
-    const docRef = projectFirestore.collection(collection).doc(id);
     try {
       error.value = null;
       const res = await docRef.update(updates);

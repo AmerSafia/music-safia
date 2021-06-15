@@ -33,7 +33,7 @@
           <h3 class="title">{{ song.title }}</h3>
           <p class="artist">{{ song.artist }}</p>
         </div>
-        <button>delete</button>
+        <button v-if="owner" @click="handleClick(song.id)">delete</button>
       </div>
       <AddSong v-if="owner" :playlist="playlist" />
     </div>
@@ -64,8 +64,11 @@ export default {
         playlist.value && user.value && user.value.uid == playlist.value.userId
       );
     });
+    const { isPending, deleteDoc, UpdateDoc } = useDocument(
+      "playlists",
+      props.id
+    );
 
-    const { isPending, deleteDoc } = useDocument("playlists", props.id);
     const handleDelete = async () => {
       await deleteImg(playlist.value.filePath);
       await deleteDoc();
@@ -73,8 +76,12 @@ export default {
         name: "Home",
       });
     };
+    const handleClick = async (id) => {
+      const songs = playlist.value.songs.filter((song) => song.id != id);
+      await UpdateDoc({ songs: songs });
+    };
 
-    return { error, playlist, owner, handleDelete, isPending };
+    return { error, playlist, owner, handleDelete, isPending, handleClick };
   },
 };
 </script>
@@ -121,5 +128,13 @@ export default {
 
 .description {
   text-align: left;
+}
+.single-song {
+  padding: 10px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px dashed var(--secondary);
+  margin-bottom: 20px;
 }
 </style>
