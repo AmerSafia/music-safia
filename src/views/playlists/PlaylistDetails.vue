@@ -20,6 +20,21 @@
 
     <!-- song list -->
     <div class="song-list">
+      <div v-if="!playlist.songs.length">
+        No songs have been added to this playlist yet.
+      </div>
+      <div
+        v-else
+        v-for="song in playlist.songs"
+        :key="playlist.songs.id"
+        class="single-song"
+      >
+        <div class="details">
+          <h3 class="title">{{ song.title }}</h3>
+          <p class="artist">{{ song.artist }}</p>
+        </div>
+        <button>delete</button>
+      </div>
       <AddSong v-if="owner" :playlist="playlist" />
     </div>
   </div>
